@@ -1,24 +1,105 @@
 {
-    "title": "CheerioCrawler Template",
+    "title": "Best Plane Tickets Scraper",
     "type": "object",
     "schemaVersion": 1,
     "properties": {
-        "startUrls": {
-            "title": "Start URLs",
+        "mainDepartureCity": {
+            "title": "Main Departure City",
+            "type": "string",
+            "description": "Primary departure city/airport code (e.g., TPE for Taipei)",
+            "editor": "textfield",
+            "example": "TPE"
+        },
+        "targetCity": {
+            "title": "Target City",
+            "type": "string",
+            "description": "Final destination city/airport code (e.g., NRT for Tokyo)",
+            "editor": "textfield",
+            "example": "NRT"
+        },
+        "alternativeDepartureCities": {
+            "title": "Alternative Departure Cities",
             "type": "array",
-            "description": "URLs to start with.",
-            "editor": "requestListSources",
+            "description": "Intermediate cities to check for cheaper multi-leg routes (e.g., HKG, ICN)",
+            "editor": "stringList",
+            "default": [],
+            "prefill": []
+        },
+        "class": {
+            "title": "Cabin Class",
+            "type": "string",
+            "description": "Cabin class for all flights",
+            "editor": "select",
+            "enum": ["Economy", "Business", "First"],
+            "default": "Economy"
+        },
+        "numberOfPeople": {
+            "title": "Number of Passengers",
+            "type": "integer",
+            "description": "Number of passengers",
+            "minimum": 1,
+            "maximum": 9,
+            "default": 1
+        },
+        "timePeriods": {
+            "title": "Travel Time Periods",
+            "type": "array",
+            "description": "Date ranges for departure and return. For specific dates, set start and end to the same date.",
+            "editor": "json",
+            "default": [
+                {
+                    "outboundDateStart": "2025-12-10",
+                    "outboundDateEnd": "2025-12-12",
+                    "inboundDateStart": "2025-12-17",
+                    "inboundDateEnd": "2025-12-19"
+                }
+            ],
             "prefill": [
                 {
-                    "url": "https://apify.com"
+                    "outboundDateStart": "2025-12-10",
+                    "outboundDateEnd": "2025-12-12",
+                    "inboundDateStart": "2025-12-17",
+                    "inboundDateEnd": "2025-12-19"
                 }
             ]
+        },
+        "airlines": {
+            "title": "Airline Filter (Optional)",
+            "type": "array",
+            "description": "Filter results to only these airlines. All flight legs must use these airlines. Leave empty for no filter.",
+            "editor": "stringList",
+            "default": [],
+            "prefill": []
+        },
+        "targetLowestPrice": {
+            "title": "Sort by Lowest Price",
+            "type": "boolean",
+            "description": "Sort all results by price (lowest first)",
+            "default": true
+        },
+        "transferTimeHours": {
+            "title": "Minimum Transfer Time (hours)",
+            "type": "integer",
+            "description": "Minimum hours required between connecting flights",
+            "minimum": 1,
+            "maximum": 24,
+            "default": 3
+        },
+        "adcBufferDays": {
+            "title": "ADC Buffer Days",
+            "type": "integer",
+            "description": "Days buffer for alternative city connections (±N days from main departure/return)",
+            "minimum": 0,
+            "maximum": 3,
+            "default": 1
         },
         "maxRequestsPerCrawl": {
             "title": "Max Requests per Crawl",
             "type": "integer",
-            "description": "Maximum number of requests that can be made by this crawler.",
-            "default": 100
+            "description": "Maximum number of search requests. Large date ranges with multiple ADCs can generate many requests.",
+            "minimum": 1,
+            "default": 1000
         }
-    }
+    },
+    "required": ["mainDepartureCity", "targetCity", "class", "numberOfPeople", "timePeriods"]
 }

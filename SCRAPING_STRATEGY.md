@@ -76,11 +76,11 @@ For each Alternative Departure City, search for two-leg combinations.
 
 #### Step 2A: Search MDC ↔ ADC round trips
 
-1. For each date in outbound range (`outboundDateStart` to `outboundDateEnd`):
-    - Search MDC → ADC one-way flights
-2. For each date in inbound range (`inboundDateStart` to `inboundDateEnd`):
-    - Search ADC → MDC one-way flights
-3. Store results for pairing
+1. For each date combination in the range:
+    - Outbound: `outboundDateStart` to `outboundDateEnd`
+    - Inbound: `inboundDateStart` to `inboundDateEnd`
+    - Search MDC ↔ ADC round-trip flights
+2. Store results for pairing
 
 #### Step 2B: Search ADC ↔ TC round trips with buffer
 
@@ -113,8 +113,6 @@ TC → ADC arrival time + transferTimeHours <= ADC → MDC departure time
 
 **Important:** All 4 legs must be within the same time period (no cross-period combinations).
 
-**Route Label:** `ALTERNATIVE_ROUTE`
-
 ---
 
 ## Data Extraction Schema
@@ -130,36 +128,30 @@ TC → ADC arrival time + transferTimeHours <= ADC → MDC departure time
     totalTimeHours: number,
     totalFlights: 2, // outbound + inbound
 
-    outboundFlight: {
-        departureAirport: string,
-        departureTime: string, // ISO 8601
-        arrivalAirport: string,
-        arrivalTime: string,
-        airlines: string[], // e.g., ["EVA Air"]
-        flightNumbers: string[], // e.g., ["BR189"]
-        durationMinutes: number
-    },
-
-    inboundFlight: {
-        departureAirport: string,
-        departureTime: string,
-        arrivalAirport: string,
-        arrivalTime: string,
-        airlines: string[],
-        flightNumbers: string[],
-        durationMinutes: number
-    },
+    flights: [
+        {
+            departureAirport: string,
+            departureTime: string, // ISO 8601
+            arrivalAirport: string,
+            arrivalTime: string,
+            airlines: string[], // e.g., ["EVA Air"]
+            flightNumbers: string[], // e.g., ["BR189"]
+            durationMinutes: number
+        },
+        {
+            departureAirport: string,
+            departureTime: string,
+            arrivalAirport: string,
+            arrivalTime: string,
+            airlines: string[],
+            flightNumbers: string[],
+            durationMinutes: number
+        }
+    ],
 
     timePeriod: {
         outboundDate: string,  // Actual selected date
         inboundDate: string    // Actual selected date
-    },
-
-    searchedRange: {
-        outboundDateStart: string,
-        outboundDateEnd: string,
-        inboundDateStart: string,
-        inboundDateEnd: string
     }
 }
 ```
@@ -176,62 +168,50 @@ TC → ADC arrival time + transferTimeHours <= ADC → MDC departure time
     totalTimeHours: number,
     totalFlights: 4, // MDC→ADC, ADC→TC, TC→ADC, ADC→MDC
 
-    flight1_MDC_to_ADC: {
-        departureAirport: string,
-        departureTime: string,
-        arrivalAirport: string,
-        arrivalTime: string,
-        airlines: string[],
-        flightNumbers: string[],
-        durationMinutes: number
-    },
-
-    flight2_ADC_to_TC: {
-        departureAirport: string,
-        departureTime: string,
-        arrivalAirport: string,
-        arrivalTime: string,
-        airlines: string[],
-        flightNumbers: string[],
-        durationMinutes: number
-    },
-
-    transferTime1Hours: number, // Time between flight1 and flight2
-
-    flight3_TC_to_ADC: {
-        departureAirport: string,
-        departureTime: string,
-        arrivalAirport: string,
-        arrivalTime: string,
-        airlines: string[],
-        flightNumbers: string[],
-        durationMinutes: number
-    },
-
-    flight4_ADC_to_MDC: {
-        departureAirport: string,
-        departureTime: string,
-        arrivalAirport: string,
-        arrivalTime: string,
-        airlines: string[],
-        flightNumbers: string[],
-        durationMinutes: number
-    },
-
-    transferTime2Hours: number, // Time between flight3 and flight4
+    flights: [
+        {
+            departureAirport: string,
+            departureTime: string,
+            arrivalAirport: string,
+            arrivalTime: string,
+            airlines: string[],
+            flightNumbers: string[],
+            durationMinutes: number
+        },
+        {
+            departureAirport: string,
+            departureTime: string,
+            arrivalAirport: string,
+            arrivalTime: string,
+            airlines: string[],
+            flightNumbers: string[],
+            durationMinutes: number,
+            transferTimeHours: number // Time between flight 1 and 2
+        },
+        {
+            departureAirport: string,
+            departureTime: string,
+            arrivalAirport: string,
+            arrivalTime: string,
+            airlines: string[],
+            flightNumbers: string[],
+            durationMinutes: number
+        },
+        {
+            departureAirport: string,
+            departureTime: string,
+            arrivalAirport: string,
+            arrivalTime: string,
+            airlines: string[],
+            flightNumbers: string[],
+            durationMinutes: number,
+            transferTimeHours: number // Time between flight 3 and 4
+        }
+    ],
 
     timePeriod: {
-        mdcDepartureDate: string,   // Actual MDC departure date
-        mdcReturnDate: string,      // Actual MDC return date
-        adcToTcDate: string,        // Actual ADC→TC departure date
-        tcToAdcDate: string         // Actual TC→ADC departure date
-    },
-
-    searchedRange: {
-        outboundDateStart: string,
-        outboundDateEnd: string,
-        inboundDateStart: string,
-        inboundDateEnd: string
+        outboundDate: string,  // Actual selected date
+        inboundDate: string    // Actual selected date
     }
 }
 ```

@@ -130,21 +130,32 @@ TC → ADC arrival time + transferTimeHours <= ADC → MDC departure time
 
     flights: [
         {
+            leg: "outbound",
             departureAirport: string,
             departureTime: string, // ISO 8601
             arrivalAirport: string,
             arrivalTime: string,
-            airlines: string[], // e.g., ["EVA Air"]
-            flightNumbers: string[], // e.g., ["BR189"]
+            flightSegments: [
+                {
+                    airline: string,      // e.g., "EVA Air"
+                    flightNumber: string  // e.g., "BR189"
+                }
+                // Multiple segments for connecting flights
+            ],
             durationMinutes: number
         },
         {
+            leg: "inbound",
             departureAirport: string,
             departureTime: string,
             arrivalAirport: string,
             arrivalTime: string,
-            airlines: string[],
-            flightNumbers: string[],
+            flightSegments: [
+                {
+                    airline: string,
+                    flightNumber: string
+                }
+            ],
             durationMinutes: number
         }
     ],
@@ -170,40 +181,60 @@ TC → ADC arrival time + transferTimeHours <= ADC → MDC departure time
 
     flights: [
         {
+            leg: "MDC_to_ADC",
             departureAirport: string,
             departureTime: string,
             arrivalAirport: string,
             arrivalTime: string,
-            airlines: string[],
-            flightNumbers: string[],
+            flightSegments: [
+                {
+                    airline: string,
+                    flightNumber: string
+                }
+            ],
             durationMinutes: number
         },
         {
+            leg: "ADC_to_TC",
             departureAirport: string,
             departureTime: string,
             arrivalAirport: string,
             arrivalTime: string,
-            airlines: string[],
-            flightNumbers: string[],
+            flightSegments: [
+                {
+                    airline: string,
+                    flightNumber: string
+                }
+            ],
             durationMinutes: number,
             transferTimeHours: number // Time between flight 1 and 2
         },
         {
+            leg: "TC_to_ADC",
             departureAirport: string,
             departureTime: string,
             arrivalAirport: string,
             arrivalTime: string,
-            airlines: string[],
-            flightNumbers: string[],
+            flightSegments: [
+                {
+                    airline: string,
+                    flightNumber: string
+                }
+            ],
             durationMinutes: number
         },
         {
+            leg: "ADC_to_MDC",
             departureAirport: string,
             departureTime: string,
             arrivalAirport: string,
             arrivalTime: string,
-            airlines: string[],
-            flightNumbers: string[],
+            flightSegments: [
+                {
+                    airline: string,
+                    flightNumber: string
+                }
+            ],
             durationMinutes: number,
             transferTimeHours: number // Time between flight 3 and 4
         }

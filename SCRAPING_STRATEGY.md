@@ -41,7 +41,7 @@ _Note: Each time period defines a date range for departure from MDC and return t
 | `airlines`            | Array[Enum] | `null`  | Filter by specific airlines - applies to ALL flight legs (e.g., `['EVA', 'China Airlines']`) |
 | `targetLowestPrice`   | Boolean     | `true`  | Whether to sort results by price (lowest first)                                              |
 | `transferTimeHours`   | Integer     | `3`     | Minimum hours required between connecting flights                                            |
-| `adcBufferDays`       | Integer     | `1`     | Days buffer for ADC→TC leg (search ±N days from MDC departure/return)                        |
+| `adcBufferHours`      | Integer     | `24`    | Hours buffer for ADC→TC leg (search ±N hours from MDC departure/return)                      |
 | `maxRequestsPerCrawl` | Integer     | `1000`  | Limit total requests                                                                         |
 
 ---

@@ -85,13 +85,13 @@
             "maximum": 24,
             "default": 3
         },
-        "adcBufferDays": {
-            "title": "ADC Buffer Days",
+        "adcBufferHours": {
+            "title": "ADC Buffer Hours",
             "type": "integer",
-            "description": "Days buffer for alternative city connections (±N days from main departure/return)",
+            "description": "Hours buffer for alternative city connections (±N hours from main departure/return)",
             "minimum": 0,
-            "maximum": 3,
-            "default": 1
+            "maximum": 72,
+            "default": 24
         },
         "maxRequestsPerCrawl": {
             "title": "Max Requests per Crawl",

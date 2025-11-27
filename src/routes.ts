@@ -1,12 +1,14 @@
 import { createCheerioRouter, Dataset } from 'crawlee';
 
+import { LABELS } from './constants.js';
+
 export const router = createCheerioRouter();
 
 router.addDefaultHandler(async ({ enqueueLinks, request, $, log }) => {
     log.info('Processing START page', { url: request.loadedUrl });
 
     await enqueueLinks({
-        label: 'DETAIL',
+        label: LABELS.DETAIL,
     });
 
     const title = $('title').text();
@@ -15,11 +17,11 @@ router.addDefaultHandler(async ({ enqueueLinks, request, $, log }) => {
     await Dataset.pushData({
         url: request.loadedUrl,
         title,
-        label: 'START',
+        label: LABELS.START,
     });
 });
 
-router.addHandler('DETAIL', async ({ request, $, log }) => {
+router.addHandler(LABELS.DETAIL, async ({ request, $, log }) => {
     log.info('Processing DETAIL page', { url: request.loadedUrl });
 
     const title = $('title').text();
@@ -27,7 +29,7 @@ router.addHandler('DETAIL', async ({ request, $, log }) => {
     const data = {
         url: request.loadedUrl,
         title,
-        label: 'DETAIL',
+        label: LABELS.DETAIL,
     };
 
     await Dataset.pushData(data);
